@@ -8,9 +8,9 @@
     <artifactId>ruoyi</artifactId>
     <version>3.9.2</version>
 
-    <name>ruoyi</name>
+    <name>plate-exam</name>
     <url>http://www.ruoyi.vip</url>
-    <description>若依管理系统</description>
+    <description>plate-exam 考试管理系统</description>
     
     <properties>
         <ruoyi.version>3.9.2</ruoyi.version>
