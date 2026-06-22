@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.oa.mapper.OaLeaveMapper">
+
+    <resultMap type="OaLeave" id="OaLeaveResult">
+        <id     property="leaveId"       column="leave_id"       />
+        <result property="userId"        column="user_id"        />
+        <result property="userName"      column="user_name"      />
+        <result property="deptId"        column="dept_id"        />
+        <result property="leaveType"     column="leave_type"     />
+        <result property="startDate"     column="start_date"     />
+        <result property="endDate"       column="end_date"       />
+        <result property="days"          column="days"           />
+        <result property="reason"        column="reason"         />
+        <result property="status"        column="status"         />
+        <result property="approverId"    column="approver_id"    />
+        <result property="approveRemark" column="approve_remark" />
+        <result property="approveTime"   column="approve_time"   />
+        <result property="archiveBy"     column="archive_by"     />
+        <result property="archiveTime"   column="archive_time"   />
+        <result property="createBy"      column="create_by"      />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"      column="update_by"      />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"        column="remark"         />
+    </resultMap>
+
+    <sql id="selectOaLeaveVo">
+        select leave_id, user_id, user_name, dept_id, leave_type, start_date, end_date, days, reason, status, approver_id, approve_remark, approve_time, archive_by, archive_time, create_by, create_time, update_by, update_time, remark from oa_leave
+    </sql>
+
+    <select id="selectOaLeaveList" parameterType="OaLeave" resultMap="OaLeaveResult">
+        <include refid="selectOaLeaveVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="userName != null and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+            <if test="leaveType != null and leaveType != ''"> and leave_type = #{leaveType}</if>
+            <if test="status != null and status != ''"> and status = #{status}</if>
+            <if test="params.beginStartDate != null and params.beginStartDate != '' and params.endStartDate != null and params.endStartDate != ''"> and start_date between #{params.beginStartDate} and #{params.endStartDate}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectOaLeaveByLeaveId" parameterType="Long" resultMap="OaLeaveResult">
+        <include refid="selectOaLeaveVo"/>
+        where leave_id = #{leaveId}
+    </select>
+
+    <insert id="insertOaLeave" parameterType="OaLeave" useGeneratedKeys="true" keyProperty="leaveId">
+        insert into oa_leave
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="leaveType != null and leaveType != ''">leave_type,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="days != null">days,</if>
+            <if test="reason != null">reason,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="approverId != null">approver_id,</if>
+            <if test="approveRemark != null">approve_remark,</if>
+            <if test="approveTime != null">approve_time,</if>
+            <if test="archiveBy != null">archive_by,</if>
+            <if test="archiveTime != null">archive_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="remark != null">remark,</if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="leaveType != null and leaveType != ''">#{leaveType},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="days != null">#{days},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="approverId != null">#{approverId},</if>
+            <if test="approveRemark != null">#{approveRemark},</if>
+            <if test="approveTime != null">#{approveTime},</if>
+            <if test="archiveBy != null">#{archiveBy},</if>
+            <if test="archiveTime != null">#{archiveTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="remark != null">#{remark},</if>
+            sysdate()
+        </trim>
+    </insert>
+
+    <update id="updateOaLeave" parameterType="OaLeave">
+        update oa_leave
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="leaveType != null and leaveType != ''">leave_type = #{leaveType},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="days != null">days = #{days},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="approverId != null">approver_id = #{approverId},</if>
+            <if test="approveRemark != null">approve_remark = #{approveRemark},</if>
+            <if test="approveTime != null">approve_time = #{approveTime},</if>
+            <if test="archiveBy != null">archive_by = #{archiveBy},</if>
+            <if test="archiveTime != null">archive_time = #{archiveTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = sysdate()
+        </trim>
+        where leave_id = #{leaveId}
+    </update>
+
+    <delete id="deleteOaLeaveByLeaveId" parameterType="Long">
+        delete from oa_leave where leave_id = #{leaveId}
+    </delete>
+
+    <delete id="deleteOaLeaveByLeaveIds" parameterType="String">
+        delete from oa_leave where leave_id in
+        <foreach item="leaveId" collection="array" open="(" separator="," close=")">
+            #{leaveId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.oa.mapper.OaAttendanceMapper">
+
+    <resultMap type="OaAttendance" id="OaAttendanceResult">
+        <id     property="attId"      column="att_id"      />
+        <result property="userId"     column="user_id"     />
+        <result property="userName"   column="user_name"   />
+        <result property="deptId"     column="dept_id"     />
+        <result property="attDate"    column="att_date"    />
+        <result property="attStatus"  column="att_status"  />
+        <result property="source"     column="source"      />
+        <result property="leaveId"    column="leave_id"    />
+        <result property="createBy"   column="create_by"   />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy"   column="update_by"   />
+        <result property="updateTime" column="update_time" />
+        <result property="remark"     column="remark"      />
+    </resultMap>
+
+    <sql id="selectOaAttendanceVo">
+        select att_id, user_id, user_name, dept_id, att_date, att_status, source, leave_id, create_by, create_time, update_by, update_time, remark from oa_attendance
+    </sql>
+
+    <select id="selectOaAttendanceList" parameterType="OaAttendance" resultMap="OaAttendanceResult">
+        <include refid="selectOaAttendanceVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="userName != null and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+            <if test="attStatus != null and attStatus != ''"> and att_status = #{attStatus}</if>
+            <if test="source != null and source != ''"> and source = #{source}</if>
+            <if test="params.beginAttDate != null and params.beginAttDate != '' and params.endAttDate != null and params.endAttDate != ''"> and att_date between #{params.beginAttDate} and #{params.endAttDate}</if>
+        </where>
+        order by att_date desc
+    </select>
+
+    <select id="selectOaAttendanceByAttId" parameterType="Long" resultMap="OaAttendanceResult">
+        <include refid="selectOaAttendanceVo"/>
+        where att_id = #{attId}
+    </select>
+
+    <select id="selectOaAttendanceByUserDate" parameterType="OaAttendance" resultMap="OaAttendanceResult">
+        <include refid="selectOaAttendanceVo"/>
+        where user_id = #{userId} and att_date = #{attDate} limit 1
+    </select>
+
+    <insert id="insertOaAttendance" parameterType="OaAttendance" useGeneratedKeys="true" keyProperty="attId">
+        insert into oa_attendance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="attDate != null">att_date,</if>
+            <if test="attStatus != null and attStatus != ''">att_status,</if>
+            <if test="source != null and source != ''">source,</if>
+            <if test="leaveId != null">leave_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="remark != null">remark,</if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="attDate != null">#{attDate},</if>
+            <if test="attStatus != null and attStatus != ''">#{attStatus},</if>
+            <if test="source != null and source != ''">#{source},</if>
+            <if test="leaveId != null">#{leaveId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="remark != null">#{remark},</if>
+            sysdate()
+        </trim>
+    </insert>
+
+    <update id="updateOaAttendance" parameterType="OaAttendance">
+        update oa_attendance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="attDate != null">att_date = #{attDate},</if>
+            <if test="attStatus != null and attStatus != ''">att_status = #{attStatus},</if>
+            <if test="source != null and source != ''">source = #{source},</if>
+            <if test="leaveId != null">leave_id = #{leaveId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = sysdate()
+        </trim>
+        where att_id = #{attId}
+    </update>
+
+    <delete id="deleteOaAttendanceByAttId" parameterType="Long">
+        delete from oa_attendance where att_id = #{attId}
+    </delete>
+
+    <delete id="deleteOaAttendanceByAttIds" parameterType="String">
+        delete from oa_attendance where att_id in
+        <foreach item="attId" collection="array" open="(" separator="," close=")">
+            #{attId}
+        </foreach>
+    </delete>
+</mapper>
