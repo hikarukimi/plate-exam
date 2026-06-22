@@ -30,6 +30,7 @@ import jakarta.servlet.ServletResponse;
  * @author ruoyi
  */
 @Configuration
+@ConditionalOnProperty(name = "spring.datasource.type", havingValue = "com.alibaba.druid.pool.DruidDataSource")
 public class DruidConfig
 {
     @Bean

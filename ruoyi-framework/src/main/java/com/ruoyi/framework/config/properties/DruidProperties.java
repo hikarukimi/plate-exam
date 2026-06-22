@@ -1,6 +1,7 @@
 package com.ruoyi.framework.config.properties;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import com.alibaba.druid.pool.DruidDataSource;
 
@@ -10,6 +11,7 @@ import com.alibaba.druid.pool.DruidDataSource;
  * @author ruoyi
  */
 @Configuration
+@ConditionalOnProperty(name = "spring.datasource.type", havingValue = "com.alibaba.druid.pool.DruidDataSource")
 public class DruidProperties
 {
     @Value("${spring.datasource.druid.initialSize}")
