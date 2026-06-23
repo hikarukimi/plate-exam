@@ -172,6 +172,7 @@ public class OaLeaveServiceImpl implements IOaLeaveService
                 att.setAttStatus(ATT_STATUS_LEAVE);
                 att.setSource(ATT_SOURCE_LINK);
                 att.setLeaveId(leave.getLeaveId());
+                att.setRemark("请假：" + leave.getReason());
                 att.setCreateBy(SecurityUtils.getUsername());
                 oaAttendanceMapper.insertOaAttendance(att);
             }
@@ -180,6 +181,7 @@ public class OaLeaveServiceImpl implements IOaLeaveService
                 exist.setAttStatus(ATT_STATUS_LEAVE);
                 exist.setSource(ATT_SOURCE_LINK);
                 exist.setLeaveId(leave.getLeaveId());
+                exist.setRemark("请假：" + leave.getReason());
                 exist.setUpdateBy(SecurityUtils.getUsername());
                 oaAttendanceMapper.updateOaAttendance(exist);
             }
