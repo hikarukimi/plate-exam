@@ -25,16 +25,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectOaAttendanceList" parameterType="OaAttendance" resultMap="OaAttendanceResult">
-        <include refid="selectOaAttendanceVo"/>
+        <include refid="selectOaAttendanceVo"/> t
         <where>
-            <if test="userId != null "> and user_id = #{userId}</if>
-            <if test="userName != null and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
-            <if test="deptId != null "> and dept_id = #{deptId}</if>
-            <if test="attStatus != null and attStatus != ''"> and att_status = #{attStatus}</if>
-            <if test="source != null and source != ''"> and source = #{source}</if>
-            <if test="params.beginAttDate != null and params.beginAttDate != '' and params.endAttDate != null and params.endAttDate != ''"> and att_date between #{params.beginAttDate} and #{params.endAttDate}</if>
+            <if test="userId != null "> and t.user_id = #{userId}</if>
+            <if test="userName != null and userName != ''"> and t.user_name like concat('%', #{userName}, '%')</if>
+            <if test="deptId != null "> and t.dept_id = #{deptId}</if>
+            <if test="attStatus != null and attStatus != ''"> and t.att_status = #{attStatus}</if>
+            <if test="source != null and source != ''"> and t.source = #{source}</if>
+            <if test="params.beginAttDate != null and params.beginAttDate != '' and params.endAttDate != null and params.endAttDate != ''"> and t.att_date between #{params.beginAttDate} and #{params.endAttDate}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
         </where>
-        order by att_date desc
+        order by t.att_date desc
     </select>
 
     <select id="selectOaAttendanceByAttId" parameterType="Long" resultMap="OaAttendanceResult">

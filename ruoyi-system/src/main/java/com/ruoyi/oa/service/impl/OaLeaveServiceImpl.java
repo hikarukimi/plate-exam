@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
@@ -53,6 +54,7 @@ public class OaLeaveServiceImpl implements IOaLeaveService
     }
 
     @Override
+    @DataScope(deptAlias = "t", userAlias = "t")
     public List<OaLeave> selectOaLeaveList(OaLeave oaLeave)
     {
         return oaLeaveMapper.selectOaLeaveList(oaLeave);

@@ -32,16 +32,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectOaLeaveList" parameterType="OaLeave" resultMap="OaLeaveResult">
-        <include refid="selectOaLeaveVo"/>
+        <include refid="selectOaLeaveVo"/> t
         <where>
-            <if test="userId != null "> and user_id = #{userId}</if>
-            <if test="userName != null and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
-            <if test="deptId != null "> and dept_id = #{deptId}</if>
-            <if test="leaveType != null and leaveType != ''"> and leave_type = #{leaveType}</if>
-            <if test="status != null and status != ''"> and status = #{status}</if>
-            <if test="params.beginStartDate != null and params.beginStartDate != '' and params.endStartDate != null and params.endStartDate != ''"> and start_date between #{params.beginStartDate} and #{params.endStartDate}</if>
+            <if test="userId != null "> and t.user_id = #{userId}</if>
+            <if test="userName != null and userName != ''"> and t.user_name like concat('%', #{userName}, '%')</if>
+            <if test="deptId != null "> and t.dept_id = #{deptId}</if>
+            <if test="leaveType != null and leaveType != ''"> and t.leave_type = #{leaveType}</if>
+            <if test="status != null and status != ''"> and t.status = #{status}</if>
+            <if test="params.beginStartDate != null and params.beginStartDate != '' and params.endStartDate != null and params.endStartDate != ''"> and t.start_date between #{params.beginStartDate} and #{params.endStartDate}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
         </where>
-        order by create_time desc
+        order by t.create_time desc
     </select>
 
     <select id="selectOaLeaveByLeaveId" parameterType="Long" resultMap="OaLeaveResult">

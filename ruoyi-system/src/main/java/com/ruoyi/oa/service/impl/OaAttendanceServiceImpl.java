@@ -3,6 +3,7 @@ package com.ruoyi.oa.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.oa.mapper.OaAttendanceMapper;
 import com.ruoyi.oa.domain.OaAttendance;
 import com.ruoyi.oa.service.IOaAttendanceService;
@@ -25,6 +26,7 @@ public class OaAttendanceServiceImpl implements IOaAttendanceService
     }
 
     @Override
+    @DataScope(deptAlias = "t", userAlias = "t")
     public List<OaAttendance> selectOaAttendanceList(OaAttendance oaAttendance)
     {
         return oaAttendanceMapper.selectOaAttendanceList(oaAttendance);
