@@ -76,13 +76,14 @@
           </el-select>
         </el-form-item>
         <el-form-item label="开始日期" prop="startDate">
-          <el-date-picker v-model="form.startDate" type="date" value-format="yyyy-MM-dd" placeholder="选择开始日期" style="width:100%" />
+          <el-date-picker v-model="form.startDate" type="date" value-format="yyyy-MM-dd" placeholder="选择开始日期" style="width:100%" @change="calcDays" />
         </el-form-item>
         <el-form-item label="结束日期" prop="endDate">
-          <el-date-picker v-model="form.endDate" type="date" value-format="yyyy-MM-dd" placeholder="选择结束日期" style="width:100%" />
+          <el-date-picker v-model="form.endDate" type="date" value-format="yyyy-MM-dd" placeholder="选择结束日期" style="width:100%" @change="calcDays" />
         </el-form-item>
         <el-form-item label="请假天数" prop="days">
-          <el-input-number v-model="form.days" :min="0.5" :step="0.5" controls-position="right" style="width:100%" />
+          <el-input-number v-model="form.days" :min="0" disabled controls-position="right" style="width:100%" />
+          <span class="el-upload__tip" style="margin-left:8px">按起止日期自动计算（含首尾）</span>
         </el-form-item>
         <el-form-item label="请假事由" prop="reason">
           <el-input v-model="form.reason" type="textarea" placeholder="请输入请假事由" />
@@ -214,6 +215,14 @@ export default {
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.leaveId)
       this.multiple = !selection.length
+    },
+    calcDays() {
+      if (this.form.startDate && this.form.endDate) {
+        const start = new Date(this.form.startDate)
+        const end = new Date(this.form.endDate)
+        const diff = Math.floor((end - start) / 86400000) + 1
+        this.form.days = diff > 0 ? diff : 0
+      }
     },
     handleAdd() {
       this.reset()

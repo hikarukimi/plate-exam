@@ -27,6 +27,14 @@ public interface OaLeaveMapper
     public List<OaLeave> selectOaLeaveList(OaLeave oaLeave);
 
     /**
+     * 统计某员工在指定日期区间内、未驳回的请假申请数（用于重叠校验）
+     * 
+     * @param oaLeave 含 userId/startDate/endDate
+     * @return 重叠记录数
+     */
+    public int countOverlapLeave(OaLeave oaLeave);
+
+    /**
      * 新增请假申请
      * 
      * @param oaLeave 请假申请

@@ -51,6 +51,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where leave_id = #{leaveId}
     </select>
 
+    <select id="countOverlapLeave" parameterType="OaLeave" resultType="int">
+        select count(1) from oa_leave
+        where user_id = #{userId}
+          and status != 'rejected'
+          and start_date &lt;= #{endDate}
+          and end_date &gt;= #{startDate}
+    </select>
+
     <insert id="insertOaLeave" parameterType="OaLeave" useGeneratedKeys="true" keyProperty="leaveId">
         insert into oa_leave
         <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -73,6 +73,10 @@ public class OaLeaveServiceImpl implements IOaLeaveService
         oaLeave.setDeptId(SecurityUtils.getDeptId());
         oaLeave.setStatus(STATUS_PENDING);
         oaLeave.setCreateBy(SecurityUtils.getUsername());
+        if (oaLeaveMapper.countOverlapLeave(oaLeave) > 0)
+        {
+            throw new ServiceException("该日期区间已存在请假申请，不可重复提交");
+        }
         return oaLeaveMapper.insertOaLeave(oaLeave);
     }
 
