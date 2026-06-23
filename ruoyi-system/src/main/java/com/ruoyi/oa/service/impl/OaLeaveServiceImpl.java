@@ -104,6 +104,12 @@ public class OaLeaveServiceImpl implements IOaLeaveService
         {
             throw new ServiceException("仅待审批状态的申请可审批");
         }
+        // 审批人须为申请人所在部门负责人（admin 不受限）
+        if (!SecurityUtils.getLoginUser().getUser().isAdmin()
+                && !db.getDeptId().equals(SecurityUtils.getDeptId()))
+        {
+            throw new ServiceException("只能审批本部门的请假申请");
+        }
         OaLeave update = new OaLeave();
         update.setLeaveId(db.getLeaveId());
         update.setStatus(pass ? STATUS_APPROVED : STATUS_REJECTED);

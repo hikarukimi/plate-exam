@@ -110,6 +110,11 @@
 
     <!-- 详情对话框 -->
     <el-dialog title="请假详情" :visible.sync="viewOpen" width="600px" append-to-body>
+      <el-steps :active="flowActive" :align-center="true" finish-status="success" :status="flowStatus" style="margin-bottom:20px">
+        <el-step title="提交申请" :description="parseTime(form.createTime, '{y}-{m}-{d}')" />
+        <el-step :title="form.status === 'rejected' ? '已驳回' : '部门审批'" :description="parseTime(form.approveTime, '{y}-{m}-{d}')" />
+        <el-step title="管理员归档" :description="parseTime(form.archiveTime, '{y}-{m}-{d}')" />
+      </el-steps>
       <el-descriptions :column="2" border>
         <el-descriptions-item label="申请人">{{ form.userName }}</el-descriptions-item>
         <el-descriptions-item label="流程状态"><dict-tag :options="dict.type.oa_leave_status" :value="form.status" /></el-descriptions-item>
@@ -163,6 +168,16 @@ export default {
   },
   created() {
     this.getList()
+  },
+  computed: {
+    // 工作流进度：提交=1 审批通过=2 归档=3；驳回时停在审批步并标红
+    flowActive() {
+      const map = { pending: 1, approved: 2, rejected: 1, archived: 3 }
+      return map[this.form.status] || 0
+    },
+    flowStatus() {
+      return this.form.status === 'rejected' ? 'error' : 'process'
+    }
   },
   methods: {
     getList() {
